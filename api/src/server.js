@@ -7,6 +7,7 @@ const videosRoutes = require("./routes/videosRoutes");
 const usuariosRoutes = require("./routes/usuariosRoutes");
 const canaisRoutes = require("./routes/canaisRoutes");
 const manipuladorDeErros = require("./middlewares/manipuladorDeErros");
+const naoEncontrado = require("./middlewares/naoEncontrado");
 
 // Middleware para permitir requisições JSON
 servidor.use(express.json());
@@ -19,6 +20,7 @@ servidor.use("/usuarios", usuariosRoutes);
 servidor.get("/", (req, res) => res.json(rotas));
 
 servidor.use(manipuladorDeErros);
+servidor.use(naoEncontrado);
 
 // Inicializando o servidor na porta 3000
 servidor.listen(3000, () => {
