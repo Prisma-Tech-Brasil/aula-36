@@ -1,4 +1,4 @@
-const { videos } = require("../mock/dados.json");
+const { videos } = require("../mocks/dados.json");
 
 class videosService {
   encontrarTodos() {
