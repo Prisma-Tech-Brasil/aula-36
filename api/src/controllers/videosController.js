@@ -1,10 +1,10 @@
 const Video = require("../models/Video");
-const videosServices = require("../services/videosServices");
+const videosService = require("../services/videosService");
 
 class VideosController {
   index(req, res) {
     const filtros = req.query;
-    const videos = videosServices.encontrarComFiltros(filtros);
+    const videos = videosService.encontrarComFiltros(filtros);
   
     if (videos.length > 0) {
       return res.status(200).json(videos);
