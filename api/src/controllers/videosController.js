@@ -1,27 +1,15 @@
-const videosService = require("../services/videosService");
 const Video = require("../models/Video");
+const videosServices = require("../services/videosServices");
 
 class VideosController {
   index(req, res) {
-    let videos = videosService.encontrarTodos();
     const filtros = req.query;
-
-    if (filtros.titulo) {
-      videos = videos.filter((video) =>
-        video.titulo.toLowerCase().includes(filtros.titulo.toLowerCase())
-      );
-    }
-
-    if (filtros.descricao) {
-      videos = videos.filter((video) =>
-        video.descricao.toLowerCase().includes(filtros.descricao.toLowerCase())
-      );
-    }
-
+    const videos = videosServices.encontrarComFiltros(filtros);
+  
     if (videos.length > 0) {
       return res.status(200).json(videos);
     }
-
+  
     return res.status(404).json({ mensagem: "Nenhum vídeo encontrado" });
   }
 
