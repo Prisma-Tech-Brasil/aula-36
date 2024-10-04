@@ -1,23 +1,23 @@
 const { Canal } = require("../models/Canal");
 const UsuarioPapel = require("../models/UsuarioPapel");
+const canaisService = require("../services/canaisService");
+const errorNotFound = require("../utils/erroNotFound");
 
 class UsuarioDonoController {
-  index(req, res) {
+  index(req, res, next) {
     try {
       const canais = canaisService.encontrarTodos();
       if (canais.length > 0) {
         res.status(200).json(canais);
       } else {
-        res.status(404).json({ mensagem: "Nenhum canal encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao buscar canals", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  show(req, res) {
+  show(req, res, next) {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
@@ -29,16 +29,14 @@ class UsuarioDonoController {
       if (usuario) {
         res.status(200).json(usuario);
       } else {
-        res.status(404).json({ mensagem: "canal não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao buscar canal", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  store(req, res) {
+  store(req, res, next) {
     try {
       const { nome, imagem, email } = req.body;
 
@@ -52,13 +50,11 @@ class UsuarioDonoController {
       canaisService.adicionar(novoCanal);
       res.status(201).json(novoCanal);
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao criar canal", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  update(req, res) {
+  update(req, res, next) {
     try {
       const body = req.body;
       const id = parseInt(req.params.id);
@@ -68,19 +64,17 @@ class UsuarioDonoController {
 
       const usuario = buscarPeloId(id);
       if (!usuario) {
-        return res.status(404).json({ mensagem: "Canal não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
 
       canaisService.atualizar(id, body);
       res.status(200).json(usuario);
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao editar canal", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  delete(req, res) {
+  delete(req, res, next) {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
@@ -96,12 +90,10 @@ class UsuarioDonoController {
           canalRemovido
         });
       } else {
-        res.status(404).json({ mensagem: "Canal não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao remover canal", detalhes: erro.message });
+      next(erro);
     }
   }
 }

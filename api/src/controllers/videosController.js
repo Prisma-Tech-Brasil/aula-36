@@ -2,6 +2,7 @@ const Video = require("../models/Video");
 const videosRepository = require("../repositories/videosRepository");
 const videosService = require("../services/videosService");
 const path = require("node:path");
+const errorNotFound = require("../utils/erroNotFound");
 class VideosController {
   index(req, res, next) {
     try {
@@ -14,7 +15,7 @@ class VideosController {
         return res.status(200).json(videos);
       }
 
-      return res.status(404).json({ mensagem: "Nenhum vídeo encontrado" });
+      errorNotFound(res, "Vídeo não encontrado");
     } catch (error) {
       next(error);
     }
@@ -26,7 +27,7 @@ class VideosController {
       if (video) {
         return res.status(200).json(video);
       }
-      return res.status(404).json({ mensagem: "Vídeo não encontrado" });
+      errorNotFound(res, "Vídeo não encontrado");
     } catch (error) {
       next(error);
     }
@@ -64,7 +65,7 @@ class VideosController {
 
       const video = videosService.buscarPeloId(id);
       if (!video) {
-        return res.status(404).json({ mensagem: "Vídeo não encontrado" });
+        errorNotFound(res, "Vídeo não encontrado");
       }
 
       videosService.atualizar(id, req.body);
@@ -81,7 +82,7 @@ class VideosController {
       const id = parseInt(req.params.id);
       const video = videosService.buscarPeloId(id);
       if (!video) {
-        return res.status(404).json({ mensagem: "Vídeo não encontrado" });
+        errorNotFound(res, "Vídeo não encontrado");
       }
 
       videosService.excluir(id);
