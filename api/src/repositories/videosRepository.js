@@ -1,6 +1,6 @@
 const { videos } = require("../mocks/dados.json");
 
-class videosRepository {
+class VideosRepository {
   encontrarTodos() {
     return videos;
   }
@@ -10,16 +10,13 @@ class videosRepository {
   }
 
   adicionar(video) {
-    return videos.push(video);
+    videos.push(video);
+    return video;
   }
 
   atualizar(id, videoAtualizado) {
     const video = this.buscarPeloId(id);
-
-    video.titulo = videoAtualizado.titulo;
-    video.descricao = videoAtualizado.descricao;
-    video.quantidadeViews = videoAtualizado.quantidadeViews;
-    video.canalID = videoAtualizado.canalID;
+    Object.assign(video, videoAtualizado);
 
     return video;
   }
@@ -31,4 +28,4 @@ class videosRepository {
   }
 }
 
-module.exports = new videosRepository();
+module.exports = new VideosRepository();

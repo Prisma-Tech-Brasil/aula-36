@@ -1,7 +1,7 @@
 const Video = require("../models/Video");
 const videosRepository = require("../repositories/videosRepository");
 const videosService = require("../services/videosService");
-const path = require("node:path")
+const path = require("node:path");
 class VideosController {
   index(req, res, next) {
     try {
@@ -9,26 +9,26 @@ class VideosController {
 
       const filtros = req.query;
       const videos = videosService.encontrarComFiltros(filtros);
-  
+
       if (videos.length > 0) {
         return res.status(200).json(videos);
       }
-  
+
       return res.status(404).json({ mensagem: "Nenhum vídeo encontrado" });
     } catch (error) {
-      next(error); // Passa o erro para o middleware manipulador de erros
+      next(error);
     }
   }
 
   show(req, res, next) {
     try {
-      const video = videosService.buscarPeloId(req.id);
+      const video = videosService.buscarPeloId(parseInt(req.params.id));
       if (video) {
         return res.status(200).json(video);
       }
       return res.status(404).json({ mensagem: "Vídeo não encontrado" });
     } catch (error) {
-      next(error); // Passa o erro para o middleware manipulador de erros
+      next(error);
     }
   }
 
@@ -45,43 +45,51 @@ class VideosController {
         );
       }
 
-      const novoVideo = new Video(titulo, descricao, imagePath, parseInt(canalID));
-      videosRepository.adicionar(novoVideo);
+      const novoVideo = new Video(
+        titulo,
+        descricao,
+        imagePath,
+        parseInt(canalID)
+      );
+      videosService.adicionar(novoVideo);
       return res.status(201).json(novoVideo);
     } catch (error) {
-      next(error); // Passa o erro para o middleware manipulador de erros
+      next(error);
     }
   }
 
   update(req, res, next) {
     try {
-      const video = videosService.buscarPeloId(req.id);
+      const id = parseInt(req.params.id);
+
+      const video = videosService.buscarPeloId(id);
       if (!video) {
         return res.status(404).json({ mensagem: "Vídeo não encontrado" });
       }
 
-      videosService.atualizar(req.id, req.body);
+      videosService.atualizar(id, req.body);
       return res
         .status(200)
         .json({ mensagem: "Vídeo atualizado com sucesso", video });
     } catch (error) {
-      next(error); // Passa o erro para o middleware manipulador de erros
+      next(error);
     }
   }
 
   delete(req, res, next) {
     try {
-      const video = videosService.buscarPeloId(req.id);
+      const id = parseInt(req.params.id);
+      const video = videosService.buscarPeloId(id);
       if (!video) {
         return res.status(404).json({ mensagem: "Vídeo não encontrado" });
       }
 
-      videosService.excluir(req.id);
+      videosService.excluir(id);
       return res
         .status(200)
-        .json({ mensagem: `Vídeo id:${req.id} removido com sucesso!`, video });
+        .json({ mensagem: `Vídeo id:${id} removido com sucesso!`, video });
     } catch (error) {
-      next(error); // Passa o erro para o middleware manipulador de erros
+      next(error);
     }
   }
 }

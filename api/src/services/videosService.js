@@ -6,21 +6,38 @@ class VideosService {
   }
 
   encontrarComFiltros(filtros) {
-    let videosFiltrados = videosRepository.encontrarTodos();
+    const videos = videosRepository.encontrarTodos();
+    return this.filtrarVideos(videos, filtros);
+  }
 
-    if (filtros.titulo) {
-      videosFiltrados = videosFiltrados.filter((video) =>
-        video.titulo.toLowerCase().includes(filtros.titulo.toLowerCase())
-      );
-    }
+  filtrarVideos(videos, filtros) {
+    return videos.filter((video) => {
+      const tituloValido = filtros.titulo
+        ? video.titulo.toLowerCase().includes(filtros.titulo.toLowerCase())
+        : true;
+      const descricaoValida = filtros.descricao
+        ? video.descricao
+            .toLowerCase()
+            .includes(filtros.descricao.toLowerCase())
+        : true;
+      return tituloValido && descricaoValida;
+    });
+  }
 
-    if (filtros.descricao) {
-      videosFiltrados = videosFiltrados.filter((video) =>
-        video.descricao.toLowerCase().includes(filtros.descricao.toLowerCase())
-      );
-    }
+  buscarPeloId(id) {
+    return videosRepository.buscarPeloId(id);
+  }
 
-    return videosFiltrados;
+  adicionar(video) {
+    return videosRepository.adicionar(video);
+  }
+
+  atualizar(id, videoAtualizado) {
+    return videosRepository.atualizar(id, videoAtualizado);
+  }
+
+  excluir(id) {
+    return videosRepository.excluir(id);
   }
 }
 
