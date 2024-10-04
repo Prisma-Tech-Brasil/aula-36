@@ -38,7 +38,7 @@ class VideosController {
       const imagePath = req.file?.filename;
       const { titulo, descricao, canalID } = req.body;
 
-      if (!titulo || !descricao || !imagePath || !canalID) {
+      if (!titulo || !descricao || !canalID) {
         return next(
           new Error(
             "Todos os campos (titulo, descricao, image, canalID) são obrigatórios."

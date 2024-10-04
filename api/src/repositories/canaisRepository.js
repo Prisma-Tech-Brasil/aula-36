@@ -6,7 +6,7 @@ class CanaisRepository {
   }
 
   buscarPeloId(id) {
-    return canais.find((v) => v.id === id);
+    return canais.find((c) => c.id === id);
   }
 
   adicionar(canal) {

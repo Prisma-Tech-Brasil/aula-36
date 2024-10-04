@@ -1,47 +1,54 @@
 const { Usuario } = require("../models/Usuario");
 const UsuarioPapel = require("../models/UsuarioPapel");
+const usuariosService = require("../services/usuariosService");
+const errorNotFound = require("../utils/erroNotFound");
 
 class UsuariosController {
-  index(req, res) {
+  index(req, res, next) {
     try {
-      const usuarios = usuariosServices.encontrarTodos();
+      const usuarios = usuariosService.encontrarTodos();
 
       if (usuarios.length > 0) {
         res.status(200).json(usuarios);
       } else {
-        res.status(404).json({ mensagem: "Nenhum usuário encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao buscar usuário", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  show(req, res) {
+  show(req, res, next) {
     try {
       const id = parseInt(req.params.id);
+
       if (isNaN(id)) {
         throw new Error("O ID não foi passado");
       }
 
-      const usuario = usuariosServices.buscarPeloId(id);
+      const usuario = usuariosService.buscarPeloId(id);
 
       if (usuario) {
         res.status(200).json(usuario);
       } else {
-        res.status(404).json({ mensagem: "Usuário não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao buscar usuário", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  store(req, res) {
+  store(req, res, next) {
     try {
       const { nome, imagem, email } = req.body;
+
+      if (!nome || !email) {
+        return next(
+          new Error(
+            "Todos os campos (nome, email, image, papel) são obrigatórios."
+          )
+        );
+      }
 
       const novoUsuario = new Usuario(
         nome,
@@ -50,16 +57,14 @@ class UsuariosController {
         UsuarioPapel.USUARIO_INSCRITO
       );
 
-      usuariosServices.adicionar(novoUsuario);
+      usuariosService.adicionar(novoUsuario);
       res.status(201).json(novoUsuario);
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao criar usuario", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  update(req, res) {
+  update(req, res, next) {
     try {
       const body = req.body;
       const id = parseInt(req.params.id);
@@ -67,42 +72,38 @@ class UsuariosController {
         throw new Error("O ID não foi passado");
       }
 
-      const usuario = usuariosServices.buscarPeloId(id);
+      const usuario = usuariosService.buscarPeloId(id);
       if (!usuario) {
-        return res.status(404).json({ mensagem: "Usuário não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
 
-      usuariosServices.atualizar(id, body);
+      usuariosService.atualizar(id, body);
       res.status(200).json(usuario);
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao editar usuário", detalhes: erro.message });
+      next(erro);
     }
   }
 
-  delete(req, res) {
+  delete(req, res, next) {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
         throw new Error("O ID não foi passado");
       }
 
-      const usuarioRemovido = usuariosServices.buscarPeloId(id);
+      const usuarioRemovido = usuariosService.buscarPeloId(id);
 
       if (usuarioRemovido) {
-        usuariosServices.excluir(id);
+        usuariosService.excluir(id);
         res.status(200).json({
           mensagem: `Usuário id:${id} removido com sucesso!`,
           usuarioRemovido
         });
       } else {
-        res.status(404).json({ mensagem: "Usuário não encontrado" });
+        errorNotFound(res, "Usuario não encontrado");
       }
     } catch (erro) {
-      res
-        .status(500)
-        .json({ mensagem: "Erro ao remover usuário", detalhes: erro.message });
+      next(erro);
     }
   }
 }

@@ -7,6 +7,7 @@ class UsuarioDonoController {
   index(req, res, next) {
     try {
       const canais = canaisService.encontrarTodos();
+
       if (canais.length > 0) {
         res.status(200).json(canais);
       } else {
@@ -20,6 +21,7 @@ class UsuarioDonoController {
   show(req, res, next) {
     try {
       const id = parseInt(req.params.id);
+
       if (isNaN(id)) {
         throw new Error("O ID não foi passado");
       }
@@ -40,7 +42,7 @@ class UsuarioDonoController {
     try {
       const { nome, imagem, email } = req.body;
 
-      if (!nome || !imagem || !email || !UsuarioPapel) {
+      if (!nome || !email) {
         return next(
           new Error(
             "Todos os campos (titulo, descricao, image, canalID) são obrigatórios."
