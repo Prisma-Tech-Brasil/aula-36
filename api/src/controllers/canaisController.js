@@ -40,7 +40,8 @@ class UsuarioDonoController {
 
   store(req, res, next) {
     try {
-      const { nome, imagem, email } = req.body;
+      const imagePath = req.file?.filename;
+      const { nome, email } = req.body;
 
       if (!nome || !email) {
         return next(
@@ -52,7 +53,7 @@ class UsuarioDonoController {
 
       const novoCanal = new Canal(
         nome,
-        imagem,
+        imagePath,
         email,
         UsuarioPapel.USUARIO_DONO
       );

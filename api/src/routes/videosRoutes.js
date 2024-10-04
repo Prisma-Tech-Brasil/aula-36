@@ -1,20 +1,8 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("node:path");
 const videosController = require("../controllers/videosController");
+const upload = require("../utils/uploadHandle");
 
 const router = express.Router();
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, callback) {
-      callback(null, path.resolve(__dirname, "../..", "uploads"));
-    },
-    filename(req, file, callback) {
-      callback(null, `${Date.now()}-${file.originalname}`);
-    }
-  })
-});
 
 router.get("/", videosController.index);
 

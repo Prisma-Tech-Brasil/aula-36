@@ -40,7 +40,8 @@ class UsuariosController {
 
   store(req, res, next) {
     try {
-      const { nome, imagem, email } = req.body;
+      const imagePath = req.file?.filename;
+      const { nome, email } = req.body;
 
       if (!nome || !email) {
         return next(
@@ -52,7 +53,7 @@ class UsuariosController {
 
       const novoUsuario = new Usuario(
         nome,
-        imagem,
+        imagePath,
         email,
         UsuarioPapel.USUARIO_INSCRITO
       );
