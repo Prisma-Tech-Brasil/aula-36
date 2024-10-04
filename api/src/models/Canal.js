@@ -1,9 +1,11 @@
 const { Usuario } = require("./Usuario");
 const Video = require("./Video");
+const { canais } = require("../mocks/dados.json");
 
 class Canal extends Usuario {
   constructor(id, nome, imagem, email, papel) {
-    super(id, nome, imagem, email, papel);
+    super(nome, imagem, email, papel);
+    this.id = gerarIdUnico(canais);
     this.videos = [];
     this.inscritos = [];
   }

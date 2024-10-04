@@ -3,7 +3,7 @@ const UsuarioPapel = require("../models/UsuarioPapel");
 const canaisService = require("../services/canaisService");
 const errorNotFound = require("../utils/erroNotFound");
 
-class UsuarioDonoController {
+class CanaisController {
   index(req, res, next) {
     try {
       const canais = canaisService.encontrarTodos();
@@ -109,4 +109,4 @@ class UsuarioDonoController {
   }
 }
 
-module.exports = new UsuarioDonoController();
+module.exports = new CanaisController();
