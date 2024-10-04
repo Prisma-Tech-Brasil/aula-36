@@ -45,7 +45,7 @@ class VideosController {
         );
       }
 
-      const novoVideo = new Video(titulo, descricao, imagePath, canalID);
+      const novoVideo = new Video(titulo, descricao, imagePath, parseInt(canalID));
       videosRepository.adicionar(novoVideo);
       return res.status(201).json(novoVideo);
     } catch (error) {

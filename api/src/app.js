@@ -7,7 +7,8 @@ const path = require("node:path");
 
 const app = express();
 
-app.use("/uploads", express.static(path.resolve(__dirname, "../..", "public")));
+// app.use("/uploads", express.static(path.resolve(__dirname, "..", "uploads")));
+
 // Middleware para permitir requisições JSON
 app.use(express.json());
 
