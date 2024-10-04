@@ -1,15 +1,15 @@
 const express = require("express");
+const path = require("node:path");
+
 const rotas = require("./routes");
 const rotasPossiveis = require("./mocks/rotas.json");
+
 const manipuladorDeErros = require("./middlewares/manipuladorDeErros");
 const naoEncontrado = require("./middlewares/naoEncontrado");
-const path = require("node:path");
 
 const app = express();
 
-// app.use("/uploads", express.static(path.resolve(__dirname, "..", "uploads")));
-
-// Middleware para permitir requisições JSON
+app.use("/uploads", express.static(path.resolve(__dirname, "..", "uploads")));
 app.use(express.json());
 
 // Definindo a rota principal que lista as possíveis rotas
