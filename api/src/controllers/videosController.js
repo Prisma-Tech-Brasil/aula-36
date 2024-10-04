@@ -1,9 +1,12 @@
 const Video = require("../models/Video");
+const videosRepository = require("../repositories/videosRepository");
 const videosService = require("../services/videosService");
-
+const path = require("node:path")
 class VideosController {
   index(req, res, next) {
     try {
+      console.log(path.resolve(__dirname, "../..", "public"));
+
       const filtros = req.query;
       const videos = videosService.encontrarComFiltros(filtros);
   
@@ -31,9 +34,10 @@ class VideosController {
 
   store(req, res, next) {
     try {
-      const { titulo, descricao, image, canalID } = req.body;
+      const imagePath = req.file?.filename;
+      const { titulo, descricao, canalID } = req.body;
 
-      if (!titulo || !descricao || !image || !canalID) {
+      if (!titulo || !descricao || !imagePath || !canalID) {
         return next(
           new Error(
             "Todos os campos (titulo, descricao, image, canalID) são obrigatórios."
@@ -41,8 +45,8 @@ class VideosController {
         );
       }
 
-      const novoVideo = new Video(titulo, descricao, image, canalID);
-      videosService.adicionar(novoVideo);
+      const novoVideo = new Video(titulo, descricao, imagePath, canalID);
+      videosRepository.adicionar(novoVideo);
       return res.status(201).json(novoVideo);
     } catch (error) {
       next(error); // Passa o erro para o middleware manipulador de erros

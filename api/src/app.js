@@ -3,9 +3,11 @@ const rotas = require("./routes");
 const rotasPossiveis = require("./mocks/rotas.json");
 const manipuladorDeErros = require("./middlewares/manipuladorDeErros");
 const naoEncontrado = require("./middlewares/naoEncontrado");
+const path = require("node:path");
 
 const app = express();
 
+app.use("/uploads", express.static(path.resolve(__dirname, "../..", "public")));
 // Middleware para permitir requisições JSON
 app.use(express.json());
 
