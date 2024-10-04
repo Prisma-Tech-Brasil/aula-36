@@ -1,13 +1,9 @@
 const Video = require("../models/Video");
-const videosRepository = require("../repositories/videosRepository");
 const videosService = require("../services/videosService");
-const path = require("node:path");
 const errorNotFound = require("../utils/erroNotFound");
 class VideosController {
   index(req, res, next) {
     try {
-      console.log(path.resolve(__dirname, "../..", "public"));
-
       const filtros = req.query;
       const videos = videosService.encontrarComFiltros(filtros);
 
