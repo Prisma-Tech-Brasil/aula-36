@@ -40,6 +40,14 @@ class UsuarioDonoController {
     try {
       const { nome, imagem, email } = req.body;
 
+      if (!nome || !imagem || !email || !UsuarioPapel) {
+        return next(
+          new Error(
+            "Todos os campos (titulo, descricao, image, canalID) são obrigatórios."
+          )
+        );
+      }
+
       const novoCanal = new Canal(
         nome,
         imagem,

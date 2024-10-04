@@ -19,7 +19,11 @@ class VideosController {
 
   show(req, res, next) {
     try {
-      const video = videosService.buscarPeloId(parseInt(req.params.id));
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        throw new Error("O ID não foi passado");
+      }
+      const video = videosService.buscarPeloId(id);
       if (video) {
         return res.status(200).json(video);
       }
@@ -48,6 +52,7 @@ class VideosController {
         imagePath,
         parseInt(canalID)
       );
+      
       videosService.adicionar(novoVideo);
       return res.status(201).json(novoVideo);
     } catch (error) {
